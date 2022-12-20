@@ -1,0 +1,36 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# Unit test / coverage reports
+.pytest_cache/
+
+# Mypy
+.mypy_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Environments
+.venv/
+
+# Editors
+.vscode/
+*.swp
+
+# Temporary directories/files
+/tmp/
+tmp.*
+
+# Data directory
+/data/
+
+# Working directory
+/workdir/
+
+# Checkpoints
+/checkpoints/
