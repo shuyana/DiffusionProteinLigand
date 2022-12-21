@@ -4,11 +4,12 @@
 Clone this repository and install dependencies:
 ```bash
 git clone https://github.com/shuyana/DiffusionProteinLigand.git
+cd DiffusionProteinLigand
 conda env create -f environment.yml
 conda activate dpl
 ```
 
-Download model parameters
+Download model parameters:
 ```bash
 gdown --fuzzy --folder https://drive.google.com/drive/u/1/folders/1AAJ4P5EmQtwle9_eSeNMcF-KMWObksxZ
 ```
@@ -72,8 +73,19 @@ python generate.py \
 ## Training
 Code for training will soon be available.
 
+## Citation
+    @article{Nakata2022,
+        author = {Nakata, Shuya and Mori, Yoshiharu and Tanaka, Shigenori},
+        doi = {10.1101/2022.12.20.521309},
+        url = {https://doi.org/10.1101/2022.12.20.521309},
+        title = {End-to-end protein-ligand complex structure generation with diffusion-based generative models},
+        journal = {bioRxiv},
+        year = {2022},
+        publisher = {Cold Spring Harbor Laboratory},
+    }
+
 ## Acknowledgements
-Our work is based on following repositories:
+Our work is based on the following repositories:
 - https://github.com/deepmind/alphafold
 - https://github.com/facebookresearch/esm
 - https://github.com/HannesStark/EquiBind
