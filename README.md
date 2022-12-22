@@ -24,7 +24,7 @@ export PATH="/path/to/TMalign:$PATH"
 ```
 
 ## Sample generation
-Generate complex structures with the protein structure-free model:
+Generate complex structures with the protein structure-free model (DPL):
 ```bash
 python generate.py \
     --ckpt_path "checkpoints/DPL_v1.ckpt" \
@@ -34,7 +34,7 @@ python generate.py \
     --num_samples 8
 ```
 
-Alternatively, the protein structure-dependent model can be used:
+Alternatively, the protein structure-dependent model (DPL+S) can be used:
 ```bash
 wget https://files.rcsb.org/download/6MOA.pdb
 python generate.py \
@@ -58,7 +58,7 @@ python generate.py \
 ```
 This is used only for alignment and does not affect the generation process itself.
 
-Run time can be reduced by changing num_steps from the default value of 64:
+The argument num_steps can be modified from the default of 64 to reduce execution time:
 ```bash
 python generate.py \
     --ckpt_path "checkpoints/DPL_v1.ckpt" \
@@ -71,7 +71,41 @@ python generate.py \
 ```
 
 ## Training
-Code for training will soon be available.
+
+Download the PDBbind dataset from https://zenodo.org/record/6408497 and unzip it.
+
+Move the resulting PDBBind_processed directory to data/.
+
+Preprocess the dataset:
+```bash
+python preprocess_pdbbind.py
+```
+
+Finally, run the training script:
+```
+python train.py \
+    --num_workers 8 \
+    --batch_size 1 \
+    --accumulate_grad_batches 8 \
+    --no_cb_distogram \
+    --save_dir "workdir/train/example_DPL" \
+    --single_dim 256 \
+    --pair_dim 32 \
+    --num_blocks 4
+```
+where the no_cb_distogram argument makes the model protein structure-free.
+
+Please modify the batch_size and accumulate_grad_batches arguments according to your machine(s).
+
+Default values can be used to reproduce the settings used in our paper:
+```
+python train.py \
+    --num_workers 8 \
+    --batch_size 3 \
+    --accumulate_grad_batches 8 \
+    --no_cb_distogram \
+    --save_dir "workdir/train/reproduce_DPL"
+```
 
 ## Citation
     @article{Nakata2022,

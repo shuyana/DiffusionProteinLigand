@@ -123,7 +123,9 @@ def main(args):
     for pos in positions:
         sample_protein, sample_ligand = update_pos(protein, ligand, pos)
         if ref_protein is None:
-            warnings.warn("Using the first sample as a reference. The resulting structures may be mirror images.")
+            warnings.warn(
+                "Using the first sample as a reference. The resulting structures may be mirror images."
+            )
             ref_protein = sample_protein
         tmscore, t, R = max(
             run_tmalign(sample_protein, ref_protein),

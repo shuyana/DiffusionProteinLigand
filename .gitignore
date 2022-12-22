@@ -26,8 +26,9 @@ dist/
 /tmp/
 tmp.*
 
-# Data directory
-/data/
+# Dataset directories
+/data/PDBBind_processed/
+/data/PDBBind_processed_cache/
 
 # Working directory
 /workdir/

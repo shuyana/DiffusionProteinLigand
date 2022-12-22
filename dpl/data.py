@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Any, Mapping, Optional, Sequence, Union
+from typing import Any, List, Mapping, Optional, Sequence, Union
 
 import pytorch_lightning as pl
 import torch
@@ -108,3 +108,73 @@ class RepeatDataset(Dataset):
 
     def __getitem__(self, index: int) -> Mapping[str, Any]:
         return self.data
+
+
+class PDBbindDataset(Dataset):
+    def __init__(self, root_dir: Union[str, Path], pdb_ids: Sequence[str]):
+        super().__init__()
+        if isinstance(root_dir, str):
+            root_dir = Path(root_dir)
+        self.root_dir = root_dir
+        self.pdb_ids = pdb_ids
+
+    def __len__(self):
+        return len(self.pdb_ids)
+
+    def __getitem__(self, index: int) -> Mapping[str, Any]:
+        pdb_id = self.pdb_ids[index]
+        ligand_data = torch.load(self.root_dir / pdb_id / "ligand_data.pt")
+        protein_data = torch.load(self.root_dir / pdb_id / "protein_data.pt")
+        return {"pdb_id": pdb_id, **ligand_data, **protein_data}
+
+
+class PDBbindDataModule(pl.LightningDataModule):
+    def __init__(
+        self,
+        data_dir: Union[str, Path] = "data",
+        batch_size: int = 1,
+        num_workers: int = 1,
+    ):
+        super().__init__()
+        if isinstance(data_dir, str):
+            data_dir = Path(data_dir)
+        self.data_dir = data_dir
+        self.cache_dir = data_dir / "PDBBind_processed_cache"
+        self.batch_size = batch_size
+        self.num_workers = num_workers
+
+    def setup(self, stage: Optional[str] = None) -> None:
+        self.train_pdb_ids: List[str] = []
+        with open(self.data_dir / "train_pdb_ids", "r") as f:
+            self.train_pdb_ids.extend(line.strip() for line in f.readlines())
+        self.val_pdb_ids: List[str] = []
+        with open(self.data_dir / "val_pdb_ids", "r") as f:
+            self.val_pdb_ids.extend(line.strip() for line in f.readlines())
+        self.test_pdb_ids: List[str] = []
+        with open(self.data_dir / "test_pdb_ids", "r") as f:
+            self.test_pdb_ids.extend(line.strip() for line in f.readlines())
+
+    def train_dataloader(self) -> DataLoader:
+        return DataLoader(
+            PDBbindDataset(self.cache_dir, self.train_pdb_ids),
+            batch_size=self.batch_size,
+            shuffle=True,
+            num_workers=self.num_workers,
+            collate_fn=collate_fn,
+        )
+
+    def val_dataloader(self) -> DataLoader:
+        return DataLoader(
+            PDBbindDataset(self.cache_dir, self.val_pdb_ids),
+            batch_size=self.batch_size,
+            num_workers=self.num_workers,
+            collate_fn=collate_fn,
+        )
+
+    def test_dataloader(self) -> DataLoader:
+        return DataLoader(
+            PDBbindDataset(self.cache_dir, self.test_pdb_ids),
+            batch_size=self.batch_size,
+            num_workers=self.num_workers,
+            collate_fn=collate_fn,
+        )
