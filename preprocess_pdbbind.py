@@ -15,7 +15,7 @@ from dpl.protein import RESIDUE_TYPES, protein_from_pdb_file
 def main(args):
     rdBase.DisableLog("rdApp.*")
     input_dir = args.data_dir / "PDBBind_processed"
-    if input_dir.is_dir():
+    if not input_dir.is_dir():
         raise ValueError(f"The PDBbind dataset not found: {input_dir}.")
     output_dir = args.data_dir / "PDBBind_processed_cache"
     output_dir.mkdir(parents=True)
