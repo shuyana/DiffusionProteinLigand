@@ -108,14 +108,17 @@ python train.py \
 ```
 
 ## Citation
-    @article{Nakata2022,
-        author = {Nakata, Shuya and Mori, Yoshiharu and Tanaka, Shigenori},
-        doi = {10.1101/2022.12.20.521309},
-        url = {https://doi.org/10.1101/2022.12.20.521309},
-        title = {End-to-end protein-ligand complex structure generation with diffusion-based generative models},
-        journal = {bioRxiv},
-        year = {2022},
-        publisher = {Cold Spring Harbor Laboratory},
+    @article{Nakata2023,
+        doi = {10.1186/s12859-023-05354-5},
+        url = {https://doi.org/10.1186/s12859-023-05354-5},
+        year = {2023},
+        month = jun,
+        publisher = {Springer Science and Business Media {LLC}},
+        volume = {24},
+        number = {1},
+        author = {Shuya Nakata and Yoshiharu Mori and Shigenori Tanaka},
+        title = {End-to-end protein{\textendash}ligand complex structure generation with diffusion-based generative models},
+        journal = {{BMC} Bioinformatics}
     }
 
 ## Acknowledgements
